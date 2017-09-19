@@ -138,11 +138,16 @@
     while (true) {
         NSUInteger newline;
         while ((newline = [buffer rangeOfData:delimiter options:(NSDataSearchOptions)0 range:NSMakeRange(0, buffer.length)].location) != NSNotFound) {
+#if 0
             // Skip lines starting with "Test Case", "Test Suite" and "     Executed"
             const void *b = buffer.bytes;
             if (newline < 17 || (memcmp(b, "Test Suite", 10) && memcmp(b, "Test Case", 9) && memcmp(b, "	 Executed 1 test", 17))) {
+#endif
+                [err writeData:[@"CHILD: " dataUsingEncoding:NSUTF8StringEncoding]];
                 [err writeData:[[NSData alloc] initWithBytesNoCopy:buffer.mutableBytes length:newline + 1 freeWhenDone:NO]];
+#if 0
             }
+#endif
             [buffer replaceBytesInRange:NSMakeRange(0, newline + 1) withBytes:NULL length:0];
         }
 
